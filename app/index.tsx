@@ -8,11 +8,12 @@ import {
   TextInput,
   View,
 } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link } from "expo-router";
 import { BasePokemon } from "../types";
 import PokemonCard from "../components/PokemonCard";
 import { Colors } from "../constants/Colors";
+import { FavouritesContext } from "./_layout";
 
 const Home = () => {
   const [initialPokemonsNumber, setInitialPokemonsNumber] =
@@ -22,6 +23,9 @@ const Home = () => {
   const [isFetching, setIsFetching] = useState<boolean>(false);
   const [displayLoadMoreButton, setDisplayLoadMoreButton] =
     useState<boolean>(true);
+
+  const favouritesContext = useContext(FavouritesContext);
+  const { favourites } = favouritesContext || {};
 
   const animated = new Animated.Value(1);
   const fadeIn = () => {
@@ -79,13 +83,13 @@ const Home = () => {
 
   useEffect(() => {
     fetchInitialData();
-  }, []);
+  });
 
   const displayNoResults = pokemons && pokemons.length === 0 && !isFetching;
 
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>Find you pokemon</Text>
+      <Text style={styles.header}>Find your pokemon!</Text>
       <TextInput
         style={[styles.input, { height: 40, padding: 5 }]}
         placeholder="Enter pokemon name"
@@ -112,12 +116,11 @@ const Home = () => {
         style={{ width: "100%" }}
         contentContainerStyle={{ alignItems: "center" }}
       >
-        {pokemons &&
-          pokemons.map((pokemon, index) => (
-            <Link href={`/pokemon/${pokemon.name}`} key={index}>
-              <PokemonCard name={pokemon.name} />
-            </Link>
-          ))}
+        {pokemons?.map((pokemon) => (
+          <Link href={`/pokemon/${pokemon.name}`} key={pokemon.name}>
+            <PokemonCard name={pokemon.name} isFavourite={favourites?.includes(pokemon.name)}/>
+          </Link>
+        ))}
         {displayNoResults && !isFetching && (
           <Text>No results found for "{searchTerm}"</Text>
         )}

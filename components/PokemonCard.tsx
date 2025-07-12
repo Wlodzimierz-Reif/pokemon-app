@@ -2,12 +2,18 @@ import { StyleSheet, Text, View } from "react-native";
 import React from "react";
 import { Colors } from "../constants/Colors";
 
-const PokemonCard = ({ name }: { name: string }) => {
+const PokemonCard = ({
+  name,
+  isFavourite,
+}: {
+  name: string;
+  isFavourite?: boolean;
+}) => {
   const capitalisedName = name.charAt(0).toUpperCase() + name.slice(1);
   return (
     <View style={styles.container}>
       <Text>{capitalisedName}</Text>
-      <Text>Star</Text>
+      {isFavourite && <Text>★</Text>}
     </View>
   );
 };
