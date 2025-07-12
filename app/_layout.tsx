@@ -1,10 +1,10 @@
-import React, { createContext, useEffect, useState } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-import { Colors } from "../constants/Colors";
+import { createContext, useEffect, useState } from "react";
 import { StyleSheet, useColorScheme } from "react-native";
+import { Colors } from "../constants/Colors";
 import type { FavouritesContextType } from "../types";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export const FavouritesContext = createContext<
   FavouritesContextType | undefined
@@ -56,12 +56,11 @@ const RootLayout = () => {
     >
       <StatusBar style="auto" backgroundColor="#00ff00" />
       <Stack
-      // TODO: find out how to use route dynamically
+        // TODO: find out how to use route dynamically
         screenOptions={({ route }) => ({
           headerStyle: { backgroundColor: theme.navBackground },
           headerTintColor: theme.title,
           headerTitleStyle: { fontWeight: "bold" },
-          headerTitle: "Pokemon details",
         })}
       >
         <Stack.Screen
@@ -74,7 +73,7 @@ const RootLayout = () => {
             title: "Pokemon details",
           }}
         />
-        <Stack.Screen name="favourites" options={{ title: "Favourites" }} />
+        <Stack.Screen name="Favourites" options={{ title: "Favourites" }} />
       </Stack>
     </FavouritesContext.Provider>
   );
