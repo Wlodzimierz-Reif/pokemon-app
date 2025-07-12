@@ -1,8 +1,8 @@
-import { StyleSheet, useColorScheme } from "react-native";
 import React from "react";
 import { Stack } from "expo-router";
-import { Colors } from "../constants/Colors";
 import { StatusBar } from "expo-status-bar";
+import { Colors } from "../constants/Colors";
+import { StyleSheet, useColorScheme } from "react-native";
 
 const RootLayout = () => {
   const colorScheme = useColorScheme() ?? "light";
@@ -23,7 +23,7 @@ const RootLayout = () => {
           options={{ title: "PokeSearch", headerShown: true }}
         />
         <Stack.Screen
-          name="pokemon/[id]"
+          name="pokemon/[name]"
           options={{
             title: "Pokemon details",
           }}
