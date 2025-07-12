@@ -83,7 +83,7 @@ const Home = () => {
 
   useEffect(() => {
     fetchInitialData();
-  });
+  }, []);
 
   const displayNoResults = pokemons && pokemons.length === 0 && !isFetching;
 
@@ -111,6 +111,21 @@ const Home = () => {
         >
           <Text style={{ color: "#fff", fontWeight: "bold" }}>Search</Text>
         </Animated.View>
+        <Animated.View
+          style={{
+            opacity: animated,
+            margin: 10,
+            padding: 10,
+            backgroundColor: Colors.shandy,
+            borderRadius: 5,
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Link href="/Favourites">
+            <Text style={{ color: "#fff", fontWeight: "bold" }}>Favourites</Text>
+          </Link>
+        </Animated.View>
       </Pressable>
       <ScrollView
         style={{ width: "100%" }}
@@ -118,7 +133,10 @@ const Home = () => {
       >
         {pokemons?.map((pokemon) => (
           <Link href={`/pokemon/${pokemon.name}`} key={pokemon.name}>
-            <PokemonCard name={pokemon.name} isFavourite={favourites?.includes(pokemon.name)}/>
+            <PokemonCard
+              name={pokemon.name}
+              isFavourite={favourites?.includes(pokemon.name)}
+            />
           </Link>
         ))}
         {displayNoResults && !isFetching && (

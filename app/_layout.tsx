@@ -48,7 +48,7 @@ const RootLayout = () => {
       setFavourites(restored);
     };
     fetchFavourites();
-  });
+  }, []);
 
   return (
     <FavouritesContext.Provider
