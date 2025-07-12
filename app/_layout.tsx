@@ -56,6 +56,7 @@ const RootLayout = () => {
     >
       <StatusBar style="auto" backgroundColor="#00ff00" />
       <Stack
+      // TODO: find out how to use route dynamically
         screenOptions={({ route }) => ({
           headerStyle: { backgroundColor: theme.navBackground },
           headerTintColor: theme.title,
