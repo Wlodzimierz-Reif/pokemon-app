@@ -153,7 +153,9 @@ const Home = () => {
           <Text>No results found for "{searchTerm}"</Text>
         )}
         {isFetching && <ActivityIndicator size="large" />}
-        {displayLoadMoreButton && !displayNoResults && (
+        {displayLoadMoreButton && !displayNoResults && isFetching ? (
+          <ActivityIndicator size="large" />
+        ) : (
           <Button
             title="Load more"
             onPress={() => {

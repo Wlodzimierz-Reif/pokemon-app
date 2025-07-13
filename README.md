@@ -38,7 +38,6 @@ Enjoy catching Pokémon!
 # Should/could know
 - no types for pokemons, species etc - I found out that there's a Typescript library to handle the fetching and it comes with types, buy due to time constrains I can't implement it
 - I'd rather use db for storing favourites
-- Could have used 
 - No ability to fetch initials(10 or more) after leaving the initial empty state(ie. coming back from detail screen)
-- Could have added pagination for initial random pokemons but again, time contrains
-- 
+- Could have added pagination for initial random pokemons
+- Haptics and animations could differ so the user can feel(!) the difference
