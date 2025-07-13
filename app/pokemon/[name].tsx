@@ -1,6 +1,7 @@
 import { useLocalSearchParams } from "expo-router";
 import React, { useContext, useEffect, useState } from "react";
 import {
+  ActivityIndicator,
   Image,
   Pressable,
   ScrollView,
@@ -141,7 +142,7 @@ const pokemonView = () => {
           </Pressable>
         </>
       ) : (
-        <Text>Loading...</Text>
+        <ActivityIndicator size="large" />
       )}
     </ScrollView>
   );
