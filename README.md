@@ -41,3 +41,5 @@ Enjoy catching Pokémon!
 - No ability to fetch initials(10 or more) after leaving the initial empty state(ie. coming back from detail screen)
 - Could have added pagination for initial random pokemons
 - Haptics and animations could differ so the user can feel(!) the difference
+- I left the default app images(/assets) folder
+- Only header has colours based on the device theme

@@ -2,7 +2,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { createContext, useEffect, useState } from "react";
-import { StyleSheet, useColorScheme } from "react-native";
+import { useColorScheme } from "react-native";
 import { Colors } from "../constants/Colors";
 import type { FavouritesContextType } from "../types";
 
@@ -54,8 +54,7 @@ const RootLayout = () => {
     >
       <StatusBar style="auto" backgroundColor="#00ff00" />
       <Stack
-        // TODO: find out how to use route dynamically
-        screenOptions={({ route }) => ({
+        screenOptions={() => ({
           headerStyle: { backgroundColor: theme.navBackground },
           headerTintColor: theme.title,
           headerTitleStyle: { fontWeight: "bold" },
@@ -78,5 +77,3 @@ const RootLayout = () => {
 };
 
 export default RootLayout;
-
-const styles = StyleSheet.create({});

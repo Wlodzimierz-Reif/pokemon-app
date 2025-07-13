@@ -24,6 +24,7 @@ const Home = () => {
   const [isFetching, setIsFetching] = useState<boolean>(false);
   const [displayLoadMoreButton, setDisplayLoadMoreButton] =
     useState<boolean>(true);
+  const [displayLoadInitial, setDisplayLoadInitial] = useState<boolean>(false);
 
   const favouritesContext = useContext(FavouritesContext);
   const { favourites } = favouritesContext || {};
@@ -40,6 +41,8 @@ const Home = () => {
       );
       const data = await response.json();
       setPokemons((prev) => [...prev, ...data.results]);
+      setDisplayLoadMoreButton(true);
+      setDisplayLoadInitial(false);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -50,6 +53,7 @@ const Home = () => {
       setIsFetching(true);
       setPokemons([]);
       setDisplayLoadMoreButton(false);
+      setDisplayLoadInitial(true);
       const trimmedSearchTerm = searchTerm.trim();
       const response = await fetch(
         `https://pokeapi.co/api/v2/pokemon/${trimmedSearchTerm}`
@@ -57,9 +61,8 @@ const Home = () => {
       const data = await response.json();
       setPokemons([data]);
       setIsFetching(false);
-    } catch (error) {
+    } catch {
       setIsFetching(false);
-      console.error("Error fetching searched pokemon:", error);
     }
   };
 
@@ -150,12 +153,21 @@ const Home = () => {
           </Link>
         ))}
         {displayNoResults && !isFetching && (
-          <Text>No results found for "{searchTerm}"</Text>
+          <View>
+            <Text>No results found for "{searchTerm}"</Text>
+          </View>
+        )}
+        {displayLoadInitial && !isFetching && (
+          <Button
+            title="Load initial"
+            onPress={() => {
+              fetchInitialData();
+              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+            }}
+          />
         )}
         {isFetching && <ActivityIndicator size="large" />}
-        {displayLoadMoreButton && !displayNoResults && isFetching ? (
-          <ActivityIndicator size="large" />
-        ) : (
+        {displayLoadMoreButton && !displayNoResults && (
           <Button
             title="Load more"
             onPress={() => {

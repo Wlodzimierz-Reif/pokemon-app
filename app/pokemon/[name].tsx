@@ -81,7 +81,8 @@ const pokemonView = () => {
             style={styles.image}
           />
           <Text>
-            <Text style={{ fontWeight: "bold" }}>Name:</Text> {pokemon.name}
+            <Text style={{ fontWeight: "bold" }}>Name:</Text>{" "}
+            {pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1)}
           </Text>
           <Text>
             <Text style={{ fontWeight: "bold" }}>Height:</Text> {pokemon.height}
