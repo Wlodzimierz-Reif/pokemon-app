@@ -1,16 +1,15 @@
+import { useLocalSearchParams } from "expo-router";
+import React, { useContext, useEffect, useState } from "react";
 import {
+  Image,
+  Pressable,
+  ScrollView,
   StyleSheet,
   Text,
   View,
-  Image,
-  FlatList,
-  Pressable,
-  ScrollView,
 } from "react-native";
-import React, { useContext, useEffect, useState } from "react";
-import { useLocalSearchParams } from "expo-router";
-import { FavouritesContext } from "../_layout";
 import { Colors } from "../../constants/Colors";
+import { FavouritesContext } from "../_layout";
 
 const pokemonView = () => {
   const { name } = useLocalSearchParams();
@@ -43,7 +42,6 @@ const pokemonView = () => {
         const data = await res.json();
         let species = null;
         if (data?.species) {
-          // Fetch species data separately
           species = await fetchSpecies(data.species.url);
           setSpecies(species);
         }
@@ -82,15 +80,23 @@ const pokemonView = () => {
             source={{ uri: pokemon.sprites.front_default }}
             style={styles.image}
           />
-          <Text>Name: {pokemon.name}</Text>
-          <Text>Height: {pokemon.height}</Text>
+          <Text>
+            <Text style={{ fontWeight: "bold" }}>Name:</Text> {pokemon.name}
+          </Text>
+          <Text>
+            <Text style={{ fontWeight: "bold" }}>Height:</Text> {pokemon.height}
+          </Text>
+          <Text>
+            <Text style={{ fontWeight: "bold" }}>Weight:</Text> {pokemon.weight}
+          </Text>
           <View>
             {baseStats.length > 0 && (
               <>
-                <Text>Base Stats:</Text>
+                <Text style={{ fontWeight: "bold" }}>Base Stats:</Text>
                 {baseStats.map((stat: any) => (
                   <Text key={stat.name} style={styles.listEl}>
-                    {stat.name}: {stat.value}
+                    <Text style={{ fontWeight: "bold" }}>{stat.name}:</Text>{" "}
+                    {stat.value}
                   </Text>
                 ))}
               </>
@@ -98,14 +104,19 @@ const pokemonView = () => {
           </View>
           <View>
             {/* TODO: add type for species */}
-            <Text>Species:</Text>
+            <Text>
+              <Text style={{ fontWeight: "bold" }}>Species:</Text>
+            </Text>
             {speciesList.map((item: any) => (
               <Text key={item.key} style={styles.listEl}>
                 {item.name}
               </Text>
             ))}
           </View>
-          <Text>Number of games: {pokemon.game_indices.length}</Text>
+          <Text>
+            <Text style={{ fontWeight: "bold" }}>Number of games:</Text>{" "}
+            {pokemon.game_indices.length}
+          </Text>
           <Pressable
             onPress={() => {
               if (!isFavourite && handleAddToFavourites && pokemon) {
@@ -147,5 +158,6 @@ const styles = StyleSheet.create({
   favourite: {
     fontSize: 20,
     padding: 10,
+    marginTop: 20,
   },
 });

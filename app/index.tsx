@@ -1,6 +1,8 @@
-import { Link } from "expo-router";
+import * as Haptics from "expo-haptics";
+import { Link, useRouter } from "expo-router";
 import { useContext, useEffect, useState } from "react";
 import {
+  ActivityIndicator,
   Animated,
   Button,
   Pressable,
@@ -10,15 +12,14 @@ import {
   TextInput,
   View,
 } from "react-native";
+import useFadeAnimation from "../components/hooks/ButtonAnimation";
 import PokemonCard from "../components/PokemonCard";
 import { Colors } from "../constants/Colors";
 import type { BasePokemon } from "../types";
 import { FavouritesContext } from "./_layout";
 
 const Home = () => {
-  const [initialPokemonsNumber, setInitialPokemonsNumber] =
-    useState<number>(10);
-  const [pokemons, setPokemons] = useState<BasePokemon[] | null>(null);
+  const [pokemons, setPokemons] = useState<BasePokemon[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [isFetching, setIsFetching] = useState<boolean>(false);
   const [displayLoadMoreButton, setDisplayLoadMoreButton] =
@@ -27,31 +28,18 @@ const Home = () => {
   const favouritesContext = useContext(FavouritesContext);
   const { favourites } = favouritesContext || {};
 
-  const animated = new Animated.Value(1);
-  const fadeIn = () => {
-    Animated.timing(animated, {
-      toValue: 0.4,
-      duration: 100,
-      useNativeDriver: true,
-    }).start();
-  };
-  const fadeOut = () => {
-    Animated.timing(animated, {
-      toValue: 1,
-      duration: 200,
-      useNativeDriver: true,
-    }).start();
-  };
+  const router = useRouter();
+  const searchAnim = useFadeAnimation();
+  const favAnim = useFadeAnimation();
 
   const fetchInitialData = async () => {
     try {
+      const offset = pokemons && pokemons?.length > 0 ? pokemons.length : 0;
       const response = await fetch(
-        `https://pokeapi.co/api/v2/pokemon?limit=${initialPokemonsNumber}&offset=${
-          initialPokemonsNumber + 10
-        }`
+        `https://pokeapi.co/api/v2/pokemon?limit=10&offset=${offset}`
       );
       const data = await response.json();
-      setPokemons(data.results);
+      setPokemons((prev) => [...prev, ...data.results]);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -79,6 +67,7 @@ const Home = () => {
     if (!searchTerm.trim()) {
       return;
     }
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     fetchSearchedPokemon(searchTerm.toLowerCase());
   };
 
@@ -98,10 +87,16 @@ const Home = () => {
         defaultValue={searchTerm}
         onSubmitEditing={handleSearch}
       />
-      <Pressable onPress={handleSearch} onPressIn={fadeIn} onPressOut={fadeOut}>
+      <Pressable
+        onPress={() => {
+          handleSearch();
+        }}
+        onPressIn={searchAnim.fadeIn}
+        onPressOut={searchAnim.fadeOut}
+      >
         <Animated.View
           style={{
-            opacity: animated,
+            opacity: searchAnim.animated,
             margin: 10,
             padding: 10,
             backgroundColor: Colors.orangeSoda,
@@ -113,21 +108,28 @@ const Home = () => {
           <Text style={{ color: "#fff", fontWeight: "bold" }}>Search</Text>
         </Animated.View>
       </Pressable>
-      <Animated.View
-        style={{
-          opacity: animated,
-          margin: 10,
-          padding: 10,
-          backgroundColor: Colors.shandy,
-          borderRadius: 5,
-          justifyContent: "center",
-          alignItems: "center",
+      <Pressable
+        onPress={() => {
+          router.push("/Favourites");
+          Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
         }}
+        onPressIn={favAnim.fadeIn}
+        onPressOut={favAnim.fadeOut}
       >
-        <Link href="/Favourites">
+        <Animated.View
+          style={{
+            opacity: favAnim.animated,
+            margin: 10,
+            padding: 10,
+            backgroundColor: Colors.shandy,
+            borderRadius: 5,
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
           <Text style={{ color: "#fff", fontWeight: "bold" }}>Favourites</Text>
-        </Link>
-      </Animated.View>
+        </Animated.View>
+      </Pressable>
       <ScrollView
         style={{ width: "100%", gap: 10 }}
         contentContainerStyle={{ alignItems: "center" }}
@@ -137,6 +139,9 @@ const Home = () => {
             href={`/pokemon/${pokemon.name}`}
             key={pokemon.name}
             style={{ marginVertical: 5 }}
+            onPress={() =>
+              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
+            }
           >
             <PokemonCard
               name={pokemon.name}
@@ -147,13 +152,13 @@ const Home = () => {
         {displayNoResults && !isFetching && (
           <Text>No results found for "{searchTerm}"</Text>
         )}
-        {isFetching && <Text>Loading...</Text>}
+        {isFetching && <ActivityIndicator size="large" />}
         {displayLoadMoreButton && !displayNoResults && (
           <Button
             title="Load more"
             onPress={() => {
-              setInitialPokemonsNumber((prev) => prev + 10);
               fetchInitialData();
+              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
             }}
           />
         )}

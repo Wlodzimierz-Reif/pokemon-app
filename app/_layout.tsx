@@ -28,13 +28,11 @@ const RootLayout = () => {
   const theme = Colors[colorScheme];
 
   const handleAddToFavourites = async (name: string) => {
-    console.log("%c [qq]: adding new favourite ");
     const withAdded = [...favourites, name];
     setFavourites(withAdded);
     await AsyncStorage.setItem("favourites", withAdded.join(","));
   };
   const handleRemoveFromFavourites = async (name: string) => {
-    console.log("%c [qq]: removing favourite ");
     setFavourites((prev) => prev.filter((f) => f !== name));
     await AsyncStorage.setItem(
       "favourites",
