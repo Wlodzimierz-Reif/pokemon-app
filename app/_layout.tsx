@@ -52,7 +52,7 @@ const RootLayout = () => {
     <FavouritesContext.Provider
       value={{ favourites, handleAddToFavourites, handleRemoveFromFavourites }}
     >
-      <StatusBar style="auto" backgroundColor="#00ff00" />
+      <StatusBar style="auto" />
       <Stack
         screenOptions={() => ({
           headerStyle: { backgroundColor: theme.navBackground },
